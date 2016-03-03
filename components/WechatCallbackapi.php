@@ -4,6 +4,9 @@ use Yii;
 
 class WechatCallbackapi
 {	
+	/**
+	 * 验证
+	 */
 	public function valid()
 	{
 		$echoStr = Yii::$app->request->get('echostr');
@@ -33,6 +36,9 @@ class WechatCallbackapi
 		}
 	}
 	
+	/**
+	 * 回复消息
+	 */
 	public function responseMsg()
 	{
 		$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
@@ -60,7 +66,12 @@ class WechatCallbackapi
 		}
 	}
 	
-	//文本消息
+	
+	/**
+	 * 文本消息
+	 * @param unknown $object
+	 * @return string
+	 */
 	private function receiveText($object)
 	{
 		$contentStr = "你发送的内容为：".$object->Content;
@@ -68,7 +79,11 @@ class WechatCallbackapi
 		return $resultStr;
 	}
 	
-	//图片消息
+
+	/**
+	 * 图片消息
+	 * @param unknown $object
+	 */
 	private function receiveImage($object)
 	{
 		$contentStr = "你发送的是图片，地址为：".$object->PicUrl;
@@ -89,7 +104,12 @@ class WechatCallbackapi
 		 10、view_limited：跳转图文消息URL
 	 */
 	
-	//事件消息
+
+	/**
+	 * 事件消息
+	 * @param unknown $object
+	 * @return void|string
+	 */
 	private function receiveEvent($object)
 	{
 		$contentStr = "";
@@ -156,23 +176,12 @@ class WechatCallbackapi
 	}
 	
 	
-	private function clickMessage($object,$key)
-	{
-		$messageTpl = " <xml>
-							<ToUserName><![CDATA[%s]]></ToUserName>
-							<FromUserName><![CDATA[%s]]></FromUserName>
-							<CreateTime>%s</CreateTime>
-							<MsgType><![CDATA[event]]></MsgType>
-							<Event><![CDATA[CLICK]]></Event>
-							<EventKey><![CDATA[%s]]></EventKey>
-						</xml>";
-		$resultStr = sprintf($messageTpl,$object->FromUserName,$object->ToUserName,time(),$key);
-		return $resultStr;
-	}
 	
-	
-	
-	//回复文字消息
+	/**
+	 * 回复文字消息
+	 * @param unknown $object
+	 * @param unknown $content
+	 */
 	private function transmitText($object, $content)
 	{
 		$textTpl = "<xml>
@@ -188,7 +197,12 @@ class WechatCallbackapi
 	}
 	
 	
-	//回复图文消息
+
+	/**
+	 * 回复图文消息
+	 * @param unknown $object
+	 * @param unknown $arr_item
+	 */
 	private function transmitNews($object, $arr_item)
 	{
 		//首条标题28字，其他标题39字

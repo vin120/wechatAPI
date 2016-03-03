@@ -22,7 +22,12 @@ class Wechat
 		$this->_reflashtime = Yii::$app->params['reflashtime'];	//access_token刷新时间
 	}
 	
-	//获取  全局access_token
+	
+	
+	
+	/***
+	 * 获取  全局access_token
+	 */
 	public function GetToken()
 	{
 		//1.判断数据库中是否存在数据
@@ -45,14 +50,23 @@ class Wechat
 		return $access_token;
 	}
 	
-	//创建菜单栏
+
+	/**
+	 * 创建菜单栏
+	 * @param unknown $access_token
+	 * @param unknown $menu_data
+	 */
 	public function CreateMenu($access_token,$menu_data)
 	{
 		$url="https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token;
 		$this->https_request($url, $menu_data);
 	}
 	
-	//根据code获取用户信息
+	
+	
+	/**
+	 * 根据code获取用户信息
+	 */
 	public function GetUserInfo($code)
 	{
 		//1.通过code换取  网页授权access_token
@@ -71,8 +85,15 @@ class Wechat
 		$userinfo = $this->GetUserInfoFromToken($data['access_token'], $data['openid']);
 		return $userinfo;
 	}
+	
+	
 
-	//根据用户的code授权获取  网页授权接口access_token
+	/**
+	 * 根据用户的code授权获取 网页授权接口access_token
+	 * @param unknown $appid
+	 * @param unknown $secret
+	 * @param unknown $code
+	 */
 	private function GetTokenFromCodeUrl($appid,$secret,$code)
 	{
 		$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=$appid&secret=$secret&code=$code&grant_type=authorization_code";
@@ -81,12 +102,13 @@ class Wechat
 		return $jsoninfo;
 	}
 	
-	/**
+	
+	/**  检验  网页授权凭证（access_token） 是否有效
+	 * 
 	 * 返回值  
 	 * 正确时 :{ "errcode":0,"errmsg":"ok"}  
 	 * 错误时 :{ "errcode":40003,"errmsg":"invalid openid"}
 	 */
-	//检验  网页授权凭证（access_token） 是否有效
 	private function IsTokenAvaliable($access_token,$openid)
 	{
 		$url = "https://api.weixin.qq.com/sns/auth?access_token=$access_token&openid=$openid";
@@ -95,7 +117,9 @@ class Wechat
 		return $jsoninfo;
 	}
 	
-	/**
+	/**   
+	 * 刷新  网页授权接口的access_token 
+	 * 
 	 * 返回值
 	 * 正确时:
 		 {
@@ -103,12 +127,11 @@ class Wechat
 		   "expires_in":7200,
 		   "refresh_token":"REFRESH_TOKEN",
 		   "openid":"OPENID",
-		   "scope":"SCOPE"
+		   "scope":"snsapi_userinfo"
 		}
 		错误时:
 		{"errcode":40029,"errmsg":"invalid code"}
 	 */
-	//刷新  网页授权接口的access_token  (如果需要）
 	private function ReflashTokenFromUrl($appid,$reflash_token)
 	{
 		$url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=$appid&grant_type=refresh_token&refresh_token=$reflash_token";
@@ -119,16 +142,18 @@ class Wechat
 	
 	
 	
-	/**  返回值
+	/**  
+	 * 根据  网页授权的access_token   获取用户信息
+	 * 
+	 * 返回值
 	 * {
-		 "access_token": "OezXcEiiBSKSxW0eoylIeAsR0GmYd1awCffdHgb4fhS_KKf2CotGj2cBNUKQQvj-G0ZWEE5-uBjBz941EOPqDQy5sS_GCs2z40dnvU99Y5AI1bw2uqN--2jXoBLIM5d6L9RImvm8Vg8cBAiLpWA8Vw",
+		 "access_token": "ACCESS_TOKEN",
 		 "expires_in": 7200,
-		 "refresh_token": "OezXcEiiBSKSxW0eoylIeAsR0GmYd1awCffdHgb4fhS_KKf2CotGj2cBNUKQQvj-G0ZWEE5-uBjBz941EOPqDQy5sS_GCs2z40dnvU99Y5CZPAwZksiuz_6x_TfkLoXLU7kdKM2232WDXB3Msuzq1A",
-		 "openid": "oLVPpjqs9BhvzwPj5A-vTYAX3GLc",
+		 "refresh_token": "REFRESH_TOKEN",
+		 "openid": "OPENID",
 		 "scope": "snsapi_userinfo,"
 	 }
 	 */
-	//根据  网页授权的access_token   获取用户信息
 	private function GetUserInfoFromToken($access_token,$openid)
 	{
 		$url = "https://api.weixin.qq.com/sns/userinfo?access_token=$access_token&openid=$openid&lang=zh_CN";
@@ -138,7 +163,11 @@ class Wechat
 	}
 
 
-	//从网上获取全局access_token
+	/**
+	 * 从网上获取全局access_token
+	 * @param unknown $appid
+	 * @param unknown $secret
+	 */
 	private function GetTokenFromUrl($appid,$secret)
 	{
 		$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$appid&secret=$secret";
@@ -148,21 +177,32 @@ class Wechat
 		return $access_token;
 	}
 	
-	//get sql token count 
+	
+	/**
+	 * get sql token count 
+	 */
 	private function GetTokenCount()
 	{
 		$token_count = Token::find()->count();
 		return $token_count;
 	}
 	
-	//get token and time  from sql
+	
+	/**
+	 * get token and time  from sql
+	 */
 	private function GetTokenTime()
 	{
 		$tokentime = Token::find()->where(['id'=>'1'])->one();
 		return $tokentime;
 	}
 	
-	//Insert access_token to sql 
+
+	/**
+	 * Insert access_token to sql 
+	 * @param unknown $access_token
+	 * @param unknown $nowtime
+	 */
 	private function InsertToken($access_token,$nowtime)
 	{
 		$tokenTable = new Token();
@@ -172,7 +212,12 @@ class Wechat
 		$tokenTable->save();
 	}
 	
-	//Update access_token 
+	
+	/**
+	 * Update access_token 
+	 * @param unknown $access_token
+	 * @param unknown $nowtime
+	 */
 	private function UpdateToken($access_token,$nowtime)
 	{
 		$tokenTable = Token::find()->where(['id'=>'1'])->one();
@@ -212,7 +257,11 @@ class Wechat
 	}
 	
 
-	//get menu
+
+	/**
+	 * 	get menu
+	 * @param unknown $access_token
+	 */
 	public function GetMenu($access_token)
 	{
 		$url="https://api.weixin.qq.com/cgi-bin/menu/get?access_token=".$access_token;
@@ -221,7 +270,11 @@ class Wechat
 	}
 	
 	
-	//get tencent's  server ip
+
+	/**
+	 * get tencent's  server ip
+	 * @param unknown $access_token
+	 */
 	public function GetServerIp($access_token)
 	{
 		$url = "https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=".$access_token;
