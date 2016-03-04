@@ -52,7 +52,7 @@ $config = [
     		'servers' => [
     			[
     				'host' => 'bisheng.8800.org',
-    				'port' => 18691,
+    				'port' => 18695,
 //     				'weight' => 60,
     			],
 //     			[
@@ -63,7 +63,6 @@ $config = [
     		],
     		'keyPrefix' => '',
     		'serializer' => false,
-    		'useMemcached' => true,
     	],
     
     ],

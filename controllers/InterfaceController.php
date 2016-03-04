@@ -13,10 +13,11 @@ class InterfaceController extends Controller
 	
 	public function actionIndex()
 	{
+		$tokenKey ='AccessToken';
 		$obj_token = new Wechat();
-		$token = $obj_token->GetToken();//获取access_token
+		$token = $obj_token->GetToken($tokenKey);//获取access_token
 		$obj_token->CreateMenu($token,$menu_data);//生成菜单栏
-	
+		
 		echo $token."<br>";
 	
 		$obj_wechat = new WechatCallbackapi();

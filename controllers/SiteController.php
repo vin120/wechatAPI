@@ -85,6 +85,7 @@ class SiteController extends Controller
     	}else{
     		echo "Get code failed,try again please.";
     	}
+
     	
     	exit;
         return $this->render('index');
@@ -129,6 +130,5 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
-    
-    
+
 }

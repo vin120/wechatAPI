@@ -26,28 +26,27 @@ class Wechat
 	/***
 	 * 获取  全局access_token
 	 */
-	public function GetToken()
+	public function GetToken($key)
 	{
 		//1.判断数据库中是否存在数据
 		if($this->GetTokenCount() > 0){
 			//2.sql保存了Token数据，先对比时间是否在reflashtime秒内
 			$sql_time = $this->GetTokenTime()['curr_time'];
 			if( strtotime($this->_nowtime) - strtotime($sql_time) > $this->_reflashtime ){
-				//3.超过了reflashtime，需要重新获取Token并更新到数据库
+				//3.超过了reflashtime，需要重新获取Token  并更新到数据库和memcache中
 				$access_token = $this->GetTokenFromUrl($this->_appid,$this->_secret);
 				$this->UpdateToken($access_token, $this->_nowtime);
-				
+				Yii::$app->cache->set($key, $access_token);
 			}else{
-				//没到刷新时间，直接从数据库中获取
-				$access_token = $this->GetTokenTime()['access_token'];
-// 				$key = 'access_token';
-// 				$value = $access_token;
-// 				Yii::$app->cache->set($key, $value);
+				//没到刷新时间，直接从memcache中获取
+// 				$access_token = $this->GetTokenTime()['access_token'];
+				$access_token = Yii::$app->cache->get($key);
 			}
 		}else{
-			//sql没保存Token数据，先通过URL获取，再保存到数据库中
+			//sql没保存Token数据，先通过URL获取，再保存到数据库中和memcache中
 			$access_token = $this->GetTokenFromUrl($this->_appid,$this->_secret);
 			$this->InsertToken($access_token, $this->_nowtime);
+			Yii::$app->cache->set($key, $access_token);
 		}
 		return $access_token;
 	}
