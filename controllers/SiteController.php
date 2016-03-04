@@ -83,7 +83,7 @@ class SiteController extends Controller
       		}
  
     	}else{
-    		echo "Your get code faild";
+    		echo "Get code failed,try again please.";
     	}
     	
     	exit;
@@ -129,4 +129,6 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+    
+    
 }

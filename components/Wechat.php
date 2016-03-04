@@ -21,9 +21,7 @@ class Wechat
 		$this->_nowtime = date("Y-m-d H:i:s",time());			//当前时间
 		$this->_reflashtime = Yii::$app->params['reflashtime'];	//access_token刷新时间
 	}
-	
-	
-	
+
 	
 	/***
 	 * 获取  全局access_token
@@ -38,9 +36,13 @@ class Wechat
 				//3.超过了reflashtime，需要重新获取Token并更新到数据库
 				$access_token = $this->GetTokenFromUrl($this->_appid,$this->_secret);
 				$this->UpdateToken($access_token, $this->_nowtime);
+				
 			}else{
 				//没到刷新时间，直接从数据库中获取
 				$access_token = $this->GetTokenTime()['access_token'];
+// 				$key = 'access_token';
+// 				$value = $access_token;
+// 				Yii::$app->cache->set($key, $value);
 			}
 		}else{
 			//sql没保存Token数据，先通过URL获取，再保存到数据库中

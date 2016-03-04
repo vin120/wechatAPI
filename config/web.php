@@ -46,7 +46,26 @@ $config = [
             'rules' => [
             ],
         ],
-        
+    		
+    	'cache' => [
+    		'class' => 'yii\caching\MemCache',
+    		'servers' => [
+    			[
+    				'host' => 'bisheng.8800.org',
+    				'port' => 18691,
+//     				'weight' => 60,
+    			],
+//     			[
+//     				'host' => 'server2',
+//     				'port' => 11211,
+//     				'weight' => 40,
+//     			],
+    		],
+    		'keyPrefix' => '',
+    		'serializer' => false,
+    		'useMemcached' => true,
+    	],
+    
     ],
     'params' => $params,
 ];
