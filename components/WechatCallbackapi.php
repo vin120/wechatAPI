@@ -5,7 +5,7 @@ use Yii;
 class WechatCallbackapi
 {	
 	/**
-	 * 验证
+	 * 验证开发者身份
 	 */
 	public function valid()
 	{

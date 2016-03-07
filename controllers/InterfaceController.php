@@ -9,11 +9,11 @@ use app\components\WechatCallbackapi;
 
 class InterfaceController extends Controller
 {
-	public $enableCsrfValidation = false; 			//Yii机制，防止csrf攻击，不能重复提交多次表单，想要多次提交必须设置成false
+	public $enableCsrfValidation = false;  //Yii机制，防止csrf攻击，不能重复提交多次表单，想要多次提交必须设置成false
 	
 	public function actionIndex()
 	{
-		$tokenKey ='AccessToken';
+		$tokenKey = Yii::$app->params['memcacheKey'];//使用memcache保存的key
 		$obj_token = new Wechat();
 		$token = $obj_token->GetToken($tokenKey);//获取access_token
 		$obj_token->CreateMenu($token,$menu_data);//生成菜单栏

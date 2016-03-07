@@ -6,6 +6,7 @@ return [
 	'secret' => '1eca4c9c03b8e32490c68f90b9977901',
 	'token'=>'weixin',
 	'reflashtime'=>3600,
+	'memcacheKey'=>'AccessToken',
 	'menu_data'=>'
 		{
 	     "button":[
