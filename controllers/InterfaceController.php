@@ -13,6 +13,7 @@ class InterfaceController extends Controller
 	
 	public function actionIndex()
 	{
+		$menu_data = Yii::$app->params['menu_data'];
 		$tokenKey = Yii::$app->params['memcacheKey'];//使用memcache保存的key
 		$obj_token = new Wechat();
 		$token = $obj_token->GetToken($tokenKey);//获取access_token
